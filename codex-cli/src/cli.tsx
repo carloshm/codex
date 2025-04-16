@@ -140,13 +140,14 @@ if (cli.flags.help) {
 // ---------------------------------------------------------------------------
 
 const apiKey = process.env["OPENAI_API_KEY"];
+const azureApiKey = process.env["AZURE_OPENAI_API_KEY"];
 
-if (!apiKey) {
+if (!apiKey && !azureApiKey) {
   // eslint-disable-next-line no-console
   console.error(
     `\n${chalk.red("Missing OpenAI API key.")}\n\n` +
       `Set the environment variable ${chalk.bold("OPENAI_API_KEY")} ` +
-      `and re-run this command.\n` +
+      `or ${chalk.bold("AZURE_OPENAI_API_KEY")} and re-run this command.\n` +
       `You can create a key here: ${chalk.bold(
         chalk.underline("https://platform.openai.com/account/api-keys"),
       )}\n`,
@@ -167,7 +168,7 @@ const model = cli.flags.model;
 const imagePaths = cli.flags.image as Array<string> | undefined;
 
 config = {
-  apiKey,
+  apiKey: apiKey || azureApiKey,
   ...config,
   model: model ?? config.model,
 };

@@ -238,6 +238,22 @@ export class AgentLoop {
     // Configure OpenAI client with optional timeout (ms) from environment
     const timeoutMs = OPENAI_TIMEOUT_MS;
     const apiKey = this.config.apiKey ?? process.env["OPENAI_API_KEY"] ?? "";
+    const azureApiKey = process.env["AZURE_OPENAI_API_KEY"] ?? "";
+    const baseURL = azureApiKey
+      ? process.env["AZURE_OPENAI_API_BASE_URL"] ?? ""
+      : OPENAI_BASE_URL;
+    const defaultHeaders = azureApiKey
+      ? {
+          "api-key": azureApiKey,
+          originator: ORIGIN,
+          version: CLI_VERSION,
+          session_id: this.sessionId,
+        }
+      : {
+          originator: ORIGIN,
+          version: CLI_VERSION,
+          session_id: this.sessionId,
+        };
     this.oai = new OpenAI({
       // The OpenAI JS SDK only requires `apiKey` when making requests against
       // the official API.  When running unit‑tests we stub out all network
@@ -246,12 +262,8 @@ export class AgentLoop {
       // errors inside the SDK (it validates that `apiKey` is a non‑empty
       // string when the field is present).
       ...(apiKey ? { apiKey } : {}),
-      baseURL: OPENAI_BASE_URL,
-      defaultHeaders: {
-        originator: ORIGIN,
-        version: CLI_VERSION,
-        session_id: this.sessionId,
-      },
+      baseURL,
+      defaultHeaders,
       ...(timeoutMs !== undefined ? { timeout: timeoutMs } : {}),
     });
 

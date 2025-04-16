@@ -247,6 +247,23 @@ You can also define custom instructions:
 - Only use git commands if I explicitly mention you should
 ```
 
+### Using Azure OpenAI API
+
+To use the Azure OpenAI API, set the following environment variables:
+
+```shell
+export AZURE_OPENAI_API_KEY="your-azure-openai-api-key"
+export AZURE_OPENAI_API_BASE_URL="your-azure-openai-api-base-url"
+```
+
+#### Example of using Azure OpenAI API
+
+```shell
+export AZURE_OPENAI_API_KEY="your-azure-openai-api-key"
+export AZURE_OPENAI_API_BASE_URL="your-azure-openai-api-base-url"
+codex "explain this codebase to me"
+```
+
 ---
 
 ## FAQ
